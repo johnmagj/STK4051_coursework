@@ -1,0 +1,24 @@
+STK basics:
+- Fischer score
+- percentiles?, quantiles?: Divide ranked/sorted data into equal sized groups (general term: quantiles), connected to confidence interval as: 95% confidence interval, divide data into 100 percentiles, remove first 2.5 and last 2.5% (range 2.5-97.5%)
+
+- t-test?
+	unpair t-test
+	paired t-test
+- confidence interval
+- confidence interval and relation to p-value
+- point estimate: a guess of a population parameter, e.g. the mean of a sample from the population --> the sample mean
+
+Ch. 4.:
+EM algorithm
+
+Ch. 9. Bootstrapping
+- Direction of Causality: Ex. weight and hight can mathematically both be functions of each other, but biologically hight is more "set" while weight can fluctuate, therefore more "natural" with weight as a function of hight: weight(hight)
+ 
+- Bootstrapping:
+	- Bootstrapping: allows for simulation of the distribution of a statistic (like mean, standard deviation, median)
+		- Can be used both for i.i.d. data and and dependant data (but beneficial to consider the stochastic mechanism generating the data and the resampling strategy)
+		- With the aim to "explorer" one statistic, e.g. the mean
+	- R(X, F): R is a function mapping the observed data X to the underlaying cumulative distribution function F
+	- Bootstrapping and regression (residual bootstrapping): randomly bootstrap the residuals (centerd -> subtract mean of reciduals) from the original model fit and original Y-values, use the bootstraped residuals to calculate new Y-values, then use these new values to calculate Beta (parameter vector), store these as Beats to create sets of Beta-vectors to do inference on
+- Pivoting
