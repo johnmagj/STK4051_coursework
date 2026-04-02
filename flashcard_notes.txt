@@ -7,7 +7,16 @@ STK basics:
 	paired t-test
 - confidence interval
 - confidence interval and relation to p-value
-- point estimate: a guess of a population parameter, e.g. the mean of a sample from the population --> the sample mean
+
+- estimator and estimate: any function of sample data (i.e. a function that takes sample data as input) used to estimate an unknown value for the population is an estimator. Estimator is the formula/function taking sample data, estimate is the specific numerical result you get from the formula. E.g. the mean of the sample data is an estimate of the mean of the population.
+
+- a parameter in statistical sense, belong to the distribution of the population, i.e. given a sample we assume both a population and an underlaying probability distribution for the population.
+
+- point estimate/estimator: a "guess" of a population parameter, e.g. the mean of a sample from the population --> the sample mean, term also used if the estimate is calculated using other estimates, S_hat*
+- Jensen's inequality:?
+- stat notation: ^: I used a formula on data
+		bar (over the symbol): I averaged something
+		*: This came from a bootstrap
 
 Ch. 4.:
 EM algorithm
@@ -19,6 +28,16 @@ Ch. 9. Bootstrapping
 	- Bootstrapping: allows for simulation of the distribution of a statistic (like mean, standard deviation, median)
 		- Can be used both for i.i.d. data and and dependant data (but beneficial to consider the stochastic mechanism generating the data and the resampling strategy)
 		- With the aim to "explorer" one statistic, e.g. the mean
+	
 	- R(X, F): R is a function mapping the observed data X to the underlaying cumulative distribution function F
+	
 	- Bootstrapping and regression (residual bootstrapping): randomly bootstrap the residuals (centerd -> subtract mean of reciduals) from the original model fit and original Y-values, use the bootstraped residuals to calculate new Y-values, then use these new values to calculate Beta (parameter vector), store these as Beats to create sets of Beta-vectors to do inference on
+
+	- Rescidual bootstrap: like strict teacher, only noise can move, x values are fixed/frozen (we draw residuals not x values)
+	- Cases (pair) bootstrap: like relaxed teacher, the pair (x,y) can move/drawn randomly
+
 - Pivoting
+- Homoscedasticity: Noise is consistent
+- Heteroscedasticity
+- reciprocal
+- empirical distribution, no need for z- or t-score as in normal confidence interval (which relay on theoretical distribution like the normal distribution)
