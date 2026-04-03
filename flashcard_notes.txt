@@ -8,9 +8,13 @@ STK basics:
 - confidence interval
 - confidence interval and relation to p-value
 
+- statistic: 
+
 - estimator and estimate: any function of sample data (i.e. a function that takes sample data as input) used to estimate an unknown value for the population is an estimator. Estimator is the formula/function taking sample data, estimate is the specific numerical result you get from the formula. E.g. the mean of the sample data is an estimate of the mean of the population.
 
 - a parameter in statistical sense, belong to the distribution of the population, i.e. given a sample we assume both a population and an underlaying probability distribution for the population.
+- a statistic refers to the sample, any function taking original sample data as input, the mean, R2, max_value etc. of the sample is a statistic
+- We use the statistic to estimate the that value for the population, i.e. when we use the statistic and make a guess for the population value, that is called a point estimate
 
 - point estimate/estimator: a "guess" of a population parameter, e.g. the mean of a sample from the population --> the sample mean, term also used if the estimate is calculated using other estimates, S_hat*
 - Jensen's inequality:?
@@ -23,15 +27,42 @@ EM algorithm
 
 Ch. 9. Bootstrapping
 - Direction of Causality: Ex. weight and hight can mathematically both be functions of each other, but biologically hight is more "set" while weight can fluctuate, therefore more "natural" with weight as a function of hight: weight(hight)
- 
-- Bootstrapping:
-	- Bootstrapping: allows for simulation of the distribution of a statistic (like mean, standard deviation, median)
+
+- Non-parametric: re-sample from the original data sample
+- parametric: re-sample from a distribution (with estimated parameters) we assume the represent the population the original sample came from
+- Important example of usage: calculate confidence intervals directly (from percentiles), find bias in the our estimates and correct the estimates for the bias, find standard error for the corrected estimator
+
+- Bootstrapping basic:
+	- In bootstrapping we assume the sample is representative of the population, i.e. it came from a population with an underlaying distribution (but with some possible bias)
+	- GOOD for estimating the spread (variance) in the population and the population distribution, e.g. the spread in the sample can be used to say something about the spread in the population
+	- BUT can not correct for a bias mean, i.e. if the mean of the sample is 50, but really 60 for the population, we wont catch that, ONLY the spread around the mean
+
+- Bootstrapping workflow:
+	- 1. Do 1000 bootstraps of original sample (with replacement)
+	- 2. Estimate on the original sample, i.e. find and estimate using the original sample, the value is a point estimate
+	- 3. Estimate on each bootstrap sample, called bootstrap estimates
+	- 4. Histogram of bootstrap estimates
+	- 5. Find the mean of the bootstrap estimates
+	- 6. Calculate confidence interval for the estimate, directly using percentiles or with BCa (for highly skewed data)
+	- 7. Find bias for estimate with: bias = mean_of_bootstrap_estimates - original_estimate
+	- 8. Find bias corrected estimate with: bias_corrected_estimate = original_estimate - bias
+	- 9. Calculate the standard error, for bootstraps simply the std of the estimate resulted form each bootstrap sample
+
+- Bootstrapping: allows for simulation of the distribution of a statistic (like mean, standard deviation, median)
 		- Can be used both for i.i.d. data and and dependant data (but beneficial to consider the stochastic mechanism generating the data and the resampling strategy)
 		- With the aim to "explorer" one statistic, e.g. the mean
+
+- BCa (Accelerated Bias-Corrected Percentile Method):
+	- Bootstrap method used to create more accurate confidence intervals the standard percentile method, by adjusting bias and skewedness (acceleration)
+	- Bias correction: 
+	- Acceleration(skewedness)
+	- For non symmetric (skewed) data, or original sample statistic is biased
+	- Provide second or accuracy --> error rate shrink faster as sample size increases compared to standard method
+	- 
 	
-	- R(X, F): R is a function mapping the observed data X to the underlaying cumulative distribution function F
+- R(X, F): R is a function mapping the observed data X to the underlaying cumulative distribution function F
 	
-	- Bootstrapping and regression (residual bootstrapping): randomly bootstrap the residuals (centerd -> subtract mean of reciduals) from the original model fit and original Y-values, use the bootstraped residuals to calculate new Y-values, then use these new values to calculate Beta (parameter vector), store these as Beats to create sets of Beta-vectors to do inference on
+- Bootstrapping and regression (residual bootstrapping): randomly bootstrap the residuals (centerd -> subtract mean of reciduals) from the original model fit and original Y-values, use the bootstraped residuals to calculate new Y-values, then use these new values to calculate Beta (parameter vector), store these as Beats to create sets of Beta-vectors to do inference on
 
 	- Rescidual bootstrap: like strict teacher, only noise can move, x values are fixed/frozen (we draw residuals not x values)
 	- Cases (pair) bootstrap: like relaxed teacher, the pair (x,y) can move/drawn randomly
