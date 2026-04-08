@@ -1,6 +1,9 @@
 STK basics:
 - Fischer score
 - percentiles?, quantiles?: Divide ranked/sorted data into equal sized groups (general term: quantiles), connected to confidence interval as: 95% confidence interval, divide data into 100 percentiles, remove first 2.5 and last 2.5% (range 2.5-97.5%)
+- quantiles given as values in [0,1], percentile as values in [0,100]
+
+
 
 - t-test?
 	unpair t-test
@@ -8,28 +11,38 @@ STK basics:
 - confidence interval
 - confidence interval and relation to p-value
 
-- statistic: 
+- standard error (SE): std()/sqrt(N), where std() is the standard deviation of some statistic and N is the sample size. While std. is about the individual samples (from the Var()), the SE is about the average
+- IMPORTANT: In bootstrapping we use the std() as the SE, so no devision byt sqrt(N), this since the bootstraps effectivly shrink the variation
+
+- a parameter in statistical sense, belong to the distribution of the population, i.e. given a sample we assume both a population and an underlaying probability distribution for the population.
+- a statistic: refers to the sample, any function taking original sample data as input, the mean, R2, max_value etc. of the sample is a statistic
+- We use the statistic to estimate the that value for the population, i.e. when we use the statistic and make a guess for the population value, that is called a point estimate
 
 - estimator and estimate: any function of sample data (i.e. a function that takes sample data as input) used to estimate an unknown value for the population is an estimator. Estimator is the formula/function taking sample data, estimate is the specific numerical result you get from the formula. E.g. the mean of the sample data is an estimate of the mean of the population.
 
-- a parameter in statistical sense, belong to the distribution of the population, i.e. given a sample we assume both a population and an underlaying probability distribution for the population.
-- a statistic refers to the sample, any function taking original sample data as input, the mean, R2, max_value etc. of the sample is a statistic
-- We use the statistic to estimate the that value for the population, i.e. when we use the statistic and make a guess for the population value, that is called a point estimate
+- in short: statistic and 
 
 - point estimate/estimator: a "guess" of a population parameter, e.g. the mean of a sample from the population --> the sample mean, term also used if the estimate is calculated using other estimates, S_hat*
+
+- interval estimate: instead of estimating a point (single value), we estimate an interval 
+
 - Jensen's inequality:?
-- stat notation: ^: I used a formula on data
-		bar (over the symbol): I averaged something
-		*: This came from a bootstrap
+- statistics notation: 	^: Is saying: We used some formula on sample data, for instance the formula for arithmetic mean
+			bar (over the symbol): Is saying: We averaged something
+			*: Is saying: this came from a bootstrap
 
 Ch. 4.:
 EM algorithm
+
+
+
 
 Ch. 9. Bootstrapping
 - Direction of Causality: Ex. weight and hight can mathematically both be functions of each other, but biologically hight is more "set" while weight can fluctuate, therefore more "natural" with weight as a function of hight: weight(hight)
 
 - Non-parametric: re-sample from the original data sample
-- parametric: re-sample from a distribution (with estimated parameters) we assume the represent the population the original sample came from
+- parametric: re-sample from a distribution (with estimated parameters) we assume represent the population that the original sample came from
+
 - Important example of usage: calculate confidence intervals directly (from percentiles), find bias in the our estimates and correct the estimates for the bias, find standard error for the corrected estimator
 
 - Bootstrapping basic:
@@ -46,7 +59,7 @@ Ch. 9. Bootstrapping
 	- 6. Calculate confidence interval for the estimate, directly using percentiles or with BCa (for highly skewed data)
 	- 7. Find bias for estimate with: bias = mean_of_bootstrap_estimates - original_estimate
 	- 8. Find bias corrected estimate with: bias_corrected_estimate = original_estimate - bias
-	- 9. Calculate the standard error, for bootstraps simply the std of the estimate resulted form each bootstrap sample
+	- 9. Calculate the standard error, for bootstraps simply the std of the estimate resulted from each bootstrap sample
 
 - Bootstrapping: allows for simulation of the distribution of a statistic (like mean, standard deviation, median)
 		- Can be used both for i.i.d. data and and dependant data (but beneficial to consider the stochastic mechanism generating the data and the resampling strategy)
@@ -62,13 +75,46 @@ Ch. 9. Bootstrapping
 	
 - R(X, F): R is a function mapping the observed data X to the underlaying cumulative distribution function F
 	
-- Bootstrapping and regression (residual bootstrapping): randomly bootstrap the residuals (centerd -> subtract mean of reciduals) from the original model fit and original Y-values, use the bootstraped residuals to calculate new Y-values, then use these new values to calculate Beta (parameter vector), store these as Beats to create sets of Beta-vectors to do inference on
+- Bootstrapping and regression:
 
-	- Rescidual bootstrap: like strict teacher, only noise can move, x values are fixed/frozen (we draw residuals not x values)
-	- Cases (pair) bootstrap: like relaxed teacher, the pair (x,y) can move/drawn randomly
+	- Residual bootstrapping: 
+		1. fit model on the original sample of X and y
+		2. predict on X and use the prediction to find the residuals, y - pred
+		2.5. (If no intercept, else optional) center the residuals by subtracting the residual mean
+		3. Bootstrap from the residuals (with replacement)
+		4. Add the residuals to the original prediction, y* = residuals* + prediction
+		5. fit new model on X and y*, store the parameters per bootstrap
 
-- Pivoting
+		- like strict teacher, only noise can move, x values are fixed/frozen (we draw residuals not x values)
+		- assume linear relationship
+
+	- Pair (cases) bootstrapping:
+		1. Pair up the data points (x, y)
+		2. Draw bootstrap samples from the set of pairs
+		3. For each bootstrap sample fit model to X* and y*, store the parameters
+	
+		- like relaxed teacher, the pair (x,y) can move/drawn randomly
+		- assume nothing about the underlaying model, treat the pairs completely randomly
+
+
+
+
+- Pivoting: Different bootstrapping methods/techniques to improve estimates, corrections and confidence intervals building on the standard bootstrapping method
+	E.g. BCa, bootstrap t (the studentized bootstrap), Empirical Variance Stabilization, Nested Bootstrap and Pre-pivoting
+
+- pre pivoting: 
+
 - Homoscedasticity: Noise is consistent
 - Heteroscedasticity
 - reciprocal
-- empirical distribution, no need for z- or t-score as in normal confidence interval (which relay on theoretical distribution like the normal distribution)
+
+- The Empirical distribution function (EDF): The function representing a sample, reflects the proportions in the sample i.e. if the sample consists of 5 flips of a coin and there are 3 Hs and 2 Ts then sampling from this distribution would yield a higher probability for Heads, the function we sample from when creating a bootstrap sample
+	- Considered non parametric since we make no assumptions about the distribution paramters, it is all there in the sample
+- for empirical distribution, no need for z- or t-score as in normal confidence interval (which relay on theoretical distribution like the normal distribution)
+
+- Balanced bootstrap
+- Antithetic bootstrap 
+
+- Bootstrapping dependant data:
+	- Model based approach: timeseries data
+	- 
