@@ -4,6 +4,15 @@ STK basics:
 - quantiles given as values in [0,1], percentile as values in [0,100]
 
 
+- mean of sample is unbiased
+- var (and thus std.) is biased, therefore we divide by (n-1) instead of n in formula
+
+- statistic: Any function of sample data that does not depend on some unknown parameters, i.e. any transformation using only the sample data
+- every estimator is a statistic, but every statistic is not a useful estimator
+
+----------------------------------------------------------------------
+
+
 
 - t-test?
 	unpair t-test
@@ -12,7 +21,7 @@ STK basics:
 - confidence interval and relation to p-value
 
 - standard error (SE): std()/sqrt(N), where std() is the standard deviation of some statistic and N is the sample size. While std. is about the individual samples (from the Var()), the SE is about the average
-- IMPORTANT: In bootstrapping we use the std() as the SE, so no devision byt sqrt(N), this since the bootstraps effectivly shrink the variation
+- IMPORTANT: In bootstrapping we use the std() as the SE, so no division by sqrt(N), this since the bootstraps effectively shrink the variation
 
 - a parameter in statistical sense, belong to the distribution of the population, i.e. given a sample we assume both a population and an underlaying probability distribution for the population.
 - a statistic: refers to the sample, any function taking original sample data as input, the mean, R2, max_value etc. of the sample is a statistic
@@ -35,7 +44,7 @@ Ch. 4.:
 EM algorithm
 
 
-
+----------------------------------------------------------------------
 
 Ch. 9. Bootstrapping
 - Direction of Causality: Ex. weight and hight can mathematically both be functions of each other, but biologically hight is more "set" while weight can fluctuate, therefore more "natural" with weight as a function of hight: weight(hight)
@@ -49,6 +58,18 @@ Ch. 9. Bootstrapping
 	- In bootstrapping we assume the sample is representative of the population, i.e. it came from a population with an underlaying distribution (but with some possible bias)
 	- GOOD for estimating the spread (variance) in the population and the population distribution, e.g. the spread in the sample can be used to say something about the spread in the population
 	- BUT can not correct for a bias mean, i.e. if the mean of the sample is 50, but really 60 for the population, we wont catch that, ONLY the spread around the mean
+
+- Main ways to conduct bootstrapping:
+	- Percentile method:
+		1. You calculate some estimate from the original sample
+		2. Sample from original sample with replacement
+			2.1. Calculate bootstrap estimate
+			2.2. Store bootstrap estimate
+		3. Use the stored bootstrap estimates to create histograms or calculate confidence intervals
+
+	- Pivot/Studentized:
+		1. From the original sample calculate estimate thetha_hat
+		2. For each bootstrap calculate some "distance" or "t-score", like (theta_hat_star - theta_hat)/SE_star, where SE_star is the standard error of the bootstrap sample.
 
 - Bootstrapping workflow:
 	- 1. Do 1000 bootstraps of original sample (with replacement)
@@ -95,6 +116,7 @@ Ch. 9. Bootstrapping
 	
 		- like relaxed teacher, the pair (x,y) can move/drawn randomly
 		- assume nothing about the underlaying model, treat the pairs completely randomly
+		- stricter, more conservative
 
 
 
@@ -112,7 +134,21 @@ Ch. 9. Bootstrapping
 	- Considered non parametric since we make no assumptions about the distribution paramters, it is all there in the sample
 - for empirical distribution, no need for z- or t-score as in normal confidence interval (which relay on theoretical distribution like the normal distribution)
 
-- Balanced bootstrap
+- Hypothesis testing: With an estimate theta_hat from our original sample, and a null value theta_0 (null hypothesis):
+	1. Bootstrap from original sample with replacement
+		1.1. For each bootstrap sample calculate a bootstrap estimate theta_hat_star
+		1.2. Calculate: (theta_hat_star - theta_hat), i.e. the bootstrap estimate minus the original estimate
+		1.3. Store the result
+	2. Use the calculated bootstrap values and compare with (theta_hat - theta_null) (difference between original theta and the null hypothesis). How many of the bootstrap values are greater then original value theta_hat - theta_null?
+
+	
+
+- Balanced (permuted) bootstrap: 
+	1. Make B copies of the data (size n)
+	2. Concatinate (putting them after one another) all these samples
+	3. Randomly permute this series of values
+	4. Read of B blocks of size n sequentially.
+
 - Antithetic bootstrap 
 
 - Bootstrapping dependant data:
