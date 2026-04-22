@@ -10,6 +10,15 @@ STK basics:
 - statistic: Any function of sample data that does not depend on some unknown parameters, i.e. any transformation using only the sample data
 - every estimator is a statistic, but every statistic is not a useful estimator
 
+- sampling distribution: a distribution of a statistic. If our sample came from an assumed population, and we calculate a statistic for our sample, like the mean, then we would obtain the sampling distribution of the mean by drawing many samples from the population and calculating their mean
+
+	- the standard deviation of a sampling distribution is the same as the standard error of the sample
+
+- Bayes' theorem: p(A|B) = p(B|A)*p(A)/p(B)
+
+	- The more explicatory version: p(A & B | B) = p(A & B | A)*p(A)/p(B)
+	- Given a full contingency table, the relations in Bayes theorem can be calculated, but usually we don't have all the information 
+
 ----------------------------------------------------------------------
 
 
@@ -36,9 +45,9 @@ STK basics:
 - interval estimate: instead of estimating a point (single value), we estimate an interval 
 
 - Jensen's inequality:?
-- statistics notation: 	^: Is saying: We used some formula on sample data, for instance the formula for arithmetic mean
+- statistics notation: 	^ : Is saying: We used some formula on sample data, for instance the formula for arithmetic mean
 			bar (over the symbol): Is saying: We averaged something
-			*: Is saying: this came from a bootstrap
+			* : Is saying: this came from a bootstrap
 
 Ch. 4.:
 EM algorithm
@@ -149,8 +158,51 @@ Ch. 9. Bootstrapping
 	3. Randomly permute this series of values
 	4. Read of B blocks of size n sequentially.
 
-- Antithetic bootstrap 
+- Antithetic bootstrap:
+	1. Calculate some statistic on the original dataset
+	2. Sort the result
+	3. Resample from the sorted result list, for each draw make pick also the corresponding result starting from the oposite end of the list, thus we resample pairs across the center of the sorted list
 
-- Bootstrapping dependant data:
-	- Model based approach: timeseries data
-	- 
+- Bootstrapping dependant data, for instance timeseries data:
+	- Model based approach:
+ 
+	- Block Bootstrap:
+		- Nonmoving block bootstrap: 
+			1. Data, say: [1,2,3,4,5,6,7,8,9] is split into blocks, e.g. [1,2,3], [4,5,6], [7,8,9]
+			2. Resample the blocks with replacement, for instance we can get: [4,5,6], [1,2,3], [1,2,3]
+			- Depending on block size, can miss trends in data. Considered inferior to Moving block bootstrap
+
+		- Moving block bootstrap:
+			l = block size
+			n = number of individual samples
+			b = number of blocks
+			l-1 = overlap
+			n-l+1 = number of blocks = b
+			1. Data, say: [1,2,3,4,5,6,7,8,9] is split into overlapping blocks, e.g [1,2,3], [2,3,4], [3,4,5],
+[4,5,6], [5,6,7], [6,7,8], [7,8,9]
+			2. Resample these blocks with replacement, if bootstrap sample is bigger then original sample, truncate
+
+		- Blocks-of-Blocks bootstrapping: 
+			- Used to check accuracy of first bootstrap, since choosing block length is a guess
+			1. Perform a moving block bootstrap
+			2. For each bootstrap resample, resample from this with another moving block bootstrap
+			3. Comparing the two bootstrap samples, two see how much they vary. The error is used to calibrate/adjust the original bootstrap
+
+		- Block size:
+			- block size, l, l=1 correspond to standard bootstrap. Big l will represent larger trends in the data but leave fewer blocks to resample from
+			- block length should increase with dataset size
+			- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
