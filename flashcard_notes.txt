@@ -1,4 +1,6 @@
 STK basics:
+- Expectation value: For a random variable X, the expectation value E[X] represent the long run average of X, i.e. the value we would get if we took the mean of a large sample containing realizations of X. For instance if X is the roll of a die, then the expectation value would be the average of many roles. 
+
 - Fischer score
 - percentiles?, quantiles?: Divide ranked/sorted data into equal sized groups (general term: quantiles), connected to confidence interval as: 95% confidence interval, divide data into 100 percentiles, remove first 2.5 and last 2.5% (range 2.5-97.5%)
 - quantiles given as values in [0,1], percentile as values in [0,100]
@@ -59,7 +61,7 @@ Ch. 9. Bootstrapping
 - Direction of Causality: Ex. weight and hight can mathematically both be functions of each other, but biologically hight is more "set" while weight can fluctuate, therefore more "natural" with weight as a function of hight: weight(hight)
 
 - Non-parametric: re-sample from the original data sample
-- parametric: re-sample from a distribution (with estimated parameters) we assume represent the population that the original sample came from
+- Parametric: re-sample from a distribution (with estimated parameters) we assume represent the population that the original sample came from
 
 - Important example of usage: calculate confidence intervals directly (from percentiles), find bias in the our estimates and correct the estimates for the bias, find standard error for the corrected estimator
 
@@ -154,7 +156,7 @@ Ch. 9. Bootstrapping
 
 - Balanced (permuted) bootstrap: 
 	1. Make B copies of the data (size n)
-	2. Concatinate (putting them after one another) all these samples
+	2. Concatenate (putting them after one another) all these samples
 	3. Randomly permute this series of values
 	4. Read of B blocks of size n sequentially.
 
@@ -163,18 +165,18 @@ Ch. 9. Bootstrapping
 	2. Sort the result
 	3. Resample from the sorted result list, for each draw make pick also the corresponding result starting from the oposite end of the list, thus we resample pairs across the center of the sorted list
 
-- Bootstrapping dependant data, for instance timeseries data:
+- Bootstrapping dependant data, for instance timeseries data where subsequent datapoints are correlated:
 	- Model based approach:
  
 	- Block Bootstrap:
-		- Nonmoving block bootstrap: 
+		- Non-moving block bootstrap: 
 			1. Data, say: [1,2,3,4,5,6,7,8,9] is split into blocks, e.g. [1,2,3], [4,5,6], [7,8,9]
 			2. Resample the blocks with replacement, for instance we can get: [4,5,6], [1,2,3], [1,2,3]
 			- Depending on block size, can miss trends in data. Considered inferior to Moving block bootstrap
 
 		- Moving block bootstrap:
-			l = block size
-			n = number of individual samples
+			l = block size (number of individual samples per block)
+			n = number of individual samples in original dataset
 			b = number of blocks
 			l-1 = overlap
 			n-l+1 = number of blocks = b
